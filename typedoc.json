@@ -1,0 +1,8 @@
+{
+  "entryPoints": [
+    "./src/notes/manage.functions.ts",
+    "./src/notes/Note.class.ts",
+    "./src/notes/User.class.ts"
+  ],
+  "out": "doc"
+}
