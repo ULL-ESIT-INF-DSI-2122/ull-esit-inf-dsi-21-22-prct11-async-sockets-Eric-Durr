@@ -30,4 +30,4 @@ jobs:
         with:
           node-version: 8
       - run: npm install -g surge
-      - run: surge ./doc dsi-p10-code-docs.surge.sh --token ${{ secrets.SURGE_TOKEN }}
+      - run: surge ./doc dsi-p11-code-docs.surge.sh --token ${{ secrets.SURGE_TOKEN }}
