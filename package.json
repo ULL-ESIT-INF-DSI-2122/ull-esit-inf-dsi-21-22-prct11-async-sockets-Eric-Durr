@@ -8,6 +8,8 @@
   },
   "scripts": {
     "test": "mocha -r ts-node/register 'test/**/*.ts'",
+    "notes-server": "node dist/server.js",
+    "notes-client": "node dist/server.js",
     "test:coverage": "nyc mocha -r ts-node/register 'test/**/*.ts'",
     "get:coverage": "nyc report --reporter=text-lcov --exclude=./src/notes.ts",
     "test:watch": "mocha --watch -r ts-node/register 'test/**/*.ts' ",

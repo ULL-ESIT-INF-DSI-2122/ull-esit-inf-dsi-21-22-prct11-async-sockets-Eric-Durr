@@ -1,4 +1,10 @@
 import { createServer } from 'net';
+import * as fs from 'fs';
+import User from './notes/User.class';
+import { Note } from './notes/Note.class';
+
+const allFileNames: string[] = fs.readdirSync('database');
+
 /**
  * # Server Class | Primary parent class
  * manages a server running
