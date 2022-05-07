@@ -1,10 +1,89 @@
 import * as yargs from 'yargs';
 import {
-  // green,
+  green,
   red,
-  // blue,
-  // yellow,
+  cyan,
+  blue,
+  yellow,
 } from 'chalk';
+import Client from './Client.class';
+import { Color } from './notes/Note.class';
+
+type ColoredMessage = {
+  color: Color,
+  content: string,
+}
+
+export function coloredPrint(color: Color, content: string, inverse: boolean = false): void {
+  switch (color) {
+    case 'red':
+      inverse
+        ? console.log(red(content))
+        : console.log(red.inverse(content));
+      break;
+    case 'blue':
+      inverse
+        ? console.log(blue(content))
+        : console.log(blue.inverse(content));
+      break;
+    case 'green':
+      inverse
+        ? console.log(green(content))
+        : console.log(green.inverse(content));
+      break;
+    default:
+      inverse
+        ? console.log(yellow(content))
+        : console.log(yellow.inverse(content));
+      break;
+  }
+}
+
+export function printServerInfo(client: Client): void {
+  client.on('success', (message: string) => {
+    console.log(green(message));
+    client.closeClient();
+    process.exit(0);
+  });
+  client.on('error', (message: string) => {
+    console.log(red(message));
+    client.closeClient();
+    process.exit(1);
+  });
+  client.on('info', (message: string) => {
+    console.log(cyan(message));
+    client.closeClient();
+    process.exit(0);
+  });
+  client.on('yellow', (message: string) => {
+    console.log(yellow.inverse(message));
+    client.closeClient();
+    process.exit(0);
+  });
+  client.on('red', (message: string) => {
+    console.log(red.inverse(message));
+    client.closeClient();
+    process.exit(0);
+  });
+  client.on('green', (message: string) => {
+    console.log(green.inverse(message));
+    client.closeClient();
+    process.exit(0);
+  });
+  client.on('blue', (message: string) => {
+    console.log(blue.inverse(message));
+    client.closeClient();
+    process.exit(0);
+  });
+  client.on('list', (message: string) => {
+    const notes: ColoredMessage[] = JSON.parse(message);
+    notes.forEach((note: ColoredMessage) => {
+      coloredPrint(note.color, note.content);
+    });
+    client.closeClient();
+    process.exit(0);
+  });
+}
 
 yargs.command({
   command: 'new-user',
@@ -18,7 +97,9 @@ yargs.command({
   },
   handler(argv) {
     if (typeof argv.user === 'string') {
-      // launch client user creator
+      const client: Client = new Client(60300);
+      client.createUser(argv.user);
+      printServerInfo(client);
     }
   },
 });
@@ -35,7 +116,9 @@ yargs.command({
   },
   handler(argv) {
     if (typeof argv.user === 'string') {
-      // launch client user deletor
+      const client: Client = new Client(60300);
+      client.deleteUser(argv.user);
+      printServerInfo(client);
     }
   },
 });
@@ -52,7 +135,9 @@ yargs.command({
   },
   handler(argv) {
     if (typeof argv.user === 'string') {
-      // launch client notes lister
+      const client: Client = new Client(60300);
+      client.listNotes(argv.user);
+      printServerInfo(client);
     } else {
       console.log(red('ERROR: User was not especified\n'));
     }
@@ -77,7 +162,9 @@ yargs.command({
   handler(argv) {
     if (typeof argv.user === 'string') {
       if (typeof argv.title === 'string') {
-        // launch client note reader
+        const client: Client = new Client(60300);
+        client.readNote(argv.user, argv.title);
+        printServerInfo(client);
       } else {
         console.log(red('ERROR: Note title was not specified\n'));
       }
@@ -114,7 +201,14 @@ yargs.command({
   },
   handler(argv) {
     if (typeof argv.user === 'string') {
-      // launch client note creator
+      const client: Client = new Client(60300);
+      client.addNote(
+        argv.user,
+        typeof argv.title === 'string' ? argv.title : '',
+        typeof argv.body === 'string' ? argv.body : '',
+        typeof argv.color === 'string' ? argv.color : '',
+      );
+      printServerInfo(client);
     }
   },
 });
@@ -130,7 +224,7 @@ yargs.command({
     },
     title: {
       describe: 'Note title',
-      demandOption: false,
+      demandOption: true,
       type: 'string',
     },
     body: {
@@ -146,7 +240,14 @@ yargs.command({
   },
   handler(argv) {
     if (typeof argv.user === 'string') {
-      // launch client note editor
+      const client: Client = new Client(60300);
+      client.editNote(
+        argv.user,
+        typeof argv.title === 'string' ? argv.title : '',
+        typeof argv.body === 'string' ? argv.body : '',
+        typeof argv.color === 'string' ? argv.color : '',
+      );
+      printServerInfo(client);
     }
   },
 });
@@ -169,7 +270,9 @@ yargs.command({
   handler(argv) {
     if (typeof argv.user === 'string') {
       if (typeof argv.title === 'string') {
-        // launch client node deletion
+        const client: Client = new Client(60300);
+        client.deleteNote(argv.user, argv.title);
+        printServerInfo(client);
       } else {
         console.log(red('ERROR: Note title was not specified\n'));
       }

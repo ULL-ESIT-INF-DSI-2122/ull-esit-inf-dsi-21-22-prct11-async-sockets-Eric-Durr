@@ -39,6 +39,8 @@ export class Note {
 
   get color(): Color { return this._color; }
 
+  set color(value: Color) { this._color = value; }
+
   public colorIsYellow() { this._color = 'yellow'; }
 
   public colorIsBlue() { this._color = 'blue'; }
