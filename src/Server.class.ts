@@ -1,20 +1,44 @@
 import { createServer, Socket } from 'net';
 import * as fs from 'fs';
-import { green, yellow } from 'chalk';
-import User from './notes/User.class';
-import { Note, Color } from './notes/Note.class';
+import User from './User.class';
+import { Note } from './Note.class';
 
 const allFileNames: string[] = fs.readdirSync('database');
 
 /**
  * # Server Class | Primary parent class
- * manages a server running
+ * runs a server and manages clients notes operations
  *
  * ## Features
- * - port | number of port to connect
+ * - port | number of port to connect (readonly)
+ * - user | current user object operating
+ * - users | list of all users in the app
  *
  * ## Methods
- * - runServerCommand() | runs a command sent by a client
+ *
+ * **Public**
+ *
+ * - runServer() | runs the server and reads users requests
+ *
+ * **Private**
+ *
+ * - newUser(Socket, username) |
+ * creates a new user in the notes database and sends to client info of the process
+ * - deleteUser(Socket, username) |
+ * removes a user from the notes database and sends to client info of the process
+ * - listNotes(Socket, username) |
+ * sends to client a list of all the notes for a certain user
+ * - addNote(Socket, params) |
+ * creates a note based on params sent by clients and sends to the client info of the process
+ * - readNote(Socket, {username, title}) |
+ * sends a string formatted note with the title received from the username received
+ * - editNote(Socket, params) |
+ * edits a note based on params sent by clients and sends to the client info of the process
+ * - deleteNote(Socket, {username, title}) |
+ * deletes a note from the user received with the title
+ * received and sends to the client info of the process
+ *
+ * NOTE: params object has this shape: `{title: string, body: string, color: Color}`
  */
 
 export default class Server {

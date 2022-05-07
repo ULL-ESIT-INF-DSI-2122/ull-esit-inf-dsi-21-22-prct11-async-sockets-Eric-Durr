@@ -1,7 +1,7 @@
 // import Sinon from 'sinon';
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
-import { Note } from '../src/notes/Note.class';
+import { Note } from '../src/Note.class';
 
 // Sinon.stub(console, 'log');
 

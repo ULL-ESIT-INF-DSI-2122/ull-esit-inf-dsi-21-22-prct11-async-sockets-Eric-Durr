@@ -7,13 +7,24 @@ import {
   yellow,
 } from 'chalk';
 import Client from './Client.class';
-import { Color } from './notes/Note.class';
+import { Color } from './Note.class';
 
-type ColoredMessage = {
+/**
+ * # Colored Message | Custom type
+ */
+export type ColoredMessage = {
   color: Color,
   content: string,
 }
 
+/**
+ * # Colored Print | single function
+ * Based on the params prints in the terminal content related to notes
+ *
+ * @param color Color of the note to print
+ * @param content string with a formatted Note or a title
+ * @param inverse boolean for inverse printing
+ */
 export function coloredPrint(color: Color, content: string, inverse: boolean = false): void {
   switch (color) {
     case 'red':
@@ -38,6 +49,13 @@ export function coloredPrint(color: Color, content: string, inverse: boolean = f
       break;
   }
 }
+
+/**
+ * # Print Server Info | single function
+ * Groups events from class Client to manage server responses as custom emitted events
+ *
+ * @param client
+ */
 
 export function printServerInfo(client: Client): void {
   client.on('success', (message: string) => {

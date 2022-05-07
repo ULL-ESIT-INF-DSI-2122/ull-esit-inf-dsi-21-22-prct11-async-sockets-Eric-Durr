@@ -7,14 +7,25 @@ type OperationInfo = {
 }
 
 /**
- * # Client Class | Primary parent class
+ * # Client Class | Child primary class | extends EventEmitter
  * manages client connection and command message emission to server
  *
  * ## Features
+ *
  * - port | number of port to connect
+ * - connection | Socket object where client is connected to server
  *
  * ## Methods
- * - connectToServer() | connects to a server
+ *
+ * - createUser() |
+ * - deleteUser() |
+ * - listNotes() |
+ * - addNote() |
+ * - readNote() |
+ * - editNote() |
+ * - deleteNote() |
+ * - closeClient() |
+ * - handleServerResponse() |
  */
 
 export default class Server extends EventEmitter {
