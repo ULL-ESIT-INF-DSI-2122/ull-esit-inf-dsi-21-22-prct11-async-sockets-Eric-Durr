@@ -1,8 +1,10 @@
 {
   "entryPoints": [
-    "./src/notes/manage.functions.ts",
-    "./src/notes/Note.class.ts",
-    "./src/notes/User.class.ts"
+    "./src/Note.class.ts",
+    "./src/User.class.ts",
+    "./src/Server.class.ts",
+    "./src/Client.class.ts",
+    "./src/client.ts"
   ],
   "out": "doc"
 }
