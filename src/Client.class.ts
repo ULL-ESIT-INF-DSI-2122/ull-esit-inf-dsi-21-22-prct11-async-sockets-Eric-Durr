@@ -37,6 +37,14 @@ export default class Server extends EventEmitter {
     super();
     this.port = port;
     this.connection = connect({ port: this.port });
+    this.connection.on('error', (err) => {
+      if (err.message.split(' ')[1] === 'ECONNREFUSED') {
+        this.emit('error', 'Server is down, try again later');
+      } else {
+        this.emit('error', 'Something went wrong while connecting to server');
+      }
+      this.connection.end();
+    });
   }
 
   public createUser(username: string): void {
