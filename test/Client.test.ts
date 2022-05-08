@@ -25,6 +25,14 @@ describe('Client with server up', () => {
     client.closeClient();
   });
 
+  it('Client wants to do something but user des not exist', (done) => {
+    client.once('errormsg', (message: string) => {
+      expect(message).to.be.eq('ERROR: user random does not exists');
+      done();
+    });
+    client.listNotes('random');
+  });
+
   it('Client wants to retrieve a notes list for a user with no notes', (done) => {
     client.once('info', (message: string) => {
       expect(message).to.be.eq('No notes found for Eric ...');
@@ -35,15 +43,37 @@ describe('Client with server up', () => {
 
   it('Client wants to retrieve a notes list for a user with notes', (done) => {
     client.once('list', (message: string) => {
-      if (message) {
-        const notes: ColoredMessage[] = JSON.parse(message);
-        expect(notes
-          .map((note: ColoredMessage) => note.content)
-          .join(', '))
-          .to.be.eq('New note (4), New note (5), New note (6), New note, my new note 2, my new note, my red note');
-      }
+      const notes: ColoredMessage[] = JSON.parse(message);
+      expect(notes
+        .map((note: ColoredMessage) => note.content)
+        .join(', '))
+        .to.be.eq('New note (4), New note (5), New note (6), New note, my new note 2, my new note, my red note');
       done();
     });
     client.listNotes('Pablo');
+  });
+
+  it('Client wants to read a note but user has no notes', (done) => {
+    client.once('info', (message: string) => {
+      expect(message).to.be.eq('No notes found for Eric ...');
+      done();
+    });
+    client.readNote('Eric', 'No existing');
+  });
+
+  it('Client wants to read a note but fails', (done) => {
+    client.once('errormsg', (message: string) => {
+      expect(message).to.be.eq('ERROR: Note with title No existing doesn\'t exist');
+      done();
+    });
+    client.readNote('Pablo', 'No existing');
+  });
+
+  it('Client wants to read a note but succeeds', (done) => {
+    client.once('blue', (message: string) => {
+      expect(message).to.be.eq('New note (6)\n────────────\nnew body\n');
+      done();
+    });
+    client.readNote('Pablo', 'New note (6)');
   });
 });

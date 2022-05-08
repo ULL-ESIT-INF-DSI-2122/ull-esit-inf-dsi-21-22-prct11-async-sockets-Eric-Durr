@@ -108,7 +108,7 @@ export default class Server extends EventEmitter {
     this.connection.on('data', (dataJSON: Buffer) => {
       const data: OperationInfo = JSON.parse(dataJSON.toString());
       if (data.type === 'error') {
-        this.emit('error', data.message);
+        this.emit('errormsg', data.message);
       }
       if (data.type === 'success') {
         this.emit('success', data.message);

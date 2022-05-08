@@ -63,7 +63,7 @@ export function printServerInfo(client: Client): void {
     client.closeClient();
     process.exit(0);
   });
-  client.on('error', (message: string) => {
+  client.on('errormsg', (message: string) => {
     console.log(red(message));
     client.closeClient();
     process.exit(1);
