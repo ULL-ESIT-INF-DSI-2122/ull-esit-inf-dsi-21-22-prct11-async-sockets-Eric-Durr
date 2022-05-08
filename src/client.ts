@@ -28,22 +28,22 @@ export type ColoredMessage = {
 export function coloredPrint(color: Color, content: string, inverse: boolean = false): void {
   switch (color) {
     case 'red':
-      inverse
+      !inverse
         ? console.log(red(content))
         : console.log(red.inverse(content));
       break;
     case 'blue':
-      inverse
+      !inverse
         ? console.log(blue(content))
         : console.log(blue.inverse(content));
       break;
     case 'green':
-      inverse
+      !inverse
         ? console.log(green(content))
         : console.log(green.inverse(content));
       break;
     default:
-      inverse
+      !inverse
         ? console.log(yellow(content))
         : console.log(yellow.inverse(content));
       break;

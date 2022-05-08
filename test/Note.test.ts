@@ -1,9 +1,6 @@
-// import Sinon from 'sinon';
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
 import { Note } from '../src/Note.class';
-
-// Sinon.stub(console, 'log');
 
 describe('Default note object tests', () => {
   const defaultNote = new Note();
