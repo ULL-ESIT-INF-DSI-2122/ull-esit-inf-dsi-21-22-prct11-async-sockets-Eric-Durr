@@ -119,7 +119,7 @@ export default class Server extends EventEmitter {
         this.emit('close', 'client disconnected');
       });
       connection.on('end', () => {
-        console.log('Client has disconected');
+        console.log('Client has closed the socket');
         this.emit('close', 'client disconnected');
       });
     }).listen(this.port, () => {
