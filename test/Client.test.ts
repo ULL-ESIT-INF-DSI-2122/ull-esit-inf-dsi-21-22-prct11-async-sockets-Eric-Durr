@@ -35,7 +35,9 @@ describe('Client with server up', () => {
 
   it('Client wants to retrieve a notes list for a user with no notes', (done) => {
     client.once('info', (message: string) => {
-      expect(message).to.be.eq('No notes found for Eric ...');
+      if (message) {
+        expect(message).to.be.eq('No notes found for Eric ...');
+      }
       done();
     });
     client.listNotes('Eric');
@@ -55,7 +57,9 @@ describe('Client with server up', () => {
 
   it('Client wants to read a note but user has no notes', (done) => {
     client.once('info', (message: string) => {
-      expect(message).to.be.eq('No notes found for Eric ...');
+      if (message) {
+        expect(message).to.be.eq('No notes found for Eric ...');
+      }
       done();
     });
     client.readNote('Eric', 'No existing');
