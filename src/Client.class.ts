@@ -85,7 +85,9 @@ export default class Server extends EventEmitter {
     this.handleServerResponse();
   }
 
-  public closeClient() { this.connection.destroy(); }
+  public closeClient() {
+    this.connection.end();
+  }
 
   private handleServerResponse(): void {
     this.connection.on('error', (err) => {
@@ -114,7 +116,7 @@ export default class Server extends EventEmitter {
       }
     });
     this.connection.on('end', () => {
-      this.connection.destroy();
+      this.connection.end();
     });
   }
 }

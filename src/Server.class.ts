@@ -1,12 +1,13 @@
-import { createServer, Socket } from 'net';
+import { createServer, Socket, Server as NetServer } from 'net';
 import * as fs from 'fs';
+import EventEmitter from 'events';
 import User from './User.class';
 import { Note } from './Note.class';
 
 const allFileNames: string[] = fs.readdirSync('database');
 
 /**
- * # Server Class | Primary parent class
+ * # Server Class | Primary child class | extends EventEmmiter
  * runs a server and manages clients notes operations
  *
  * ## Features
@@ -41,21 +42,30 @@ const allFileNames: string[] = fs.readdirSync('database');
  * NOTE: params object has this shape: `{title: string, body: string, color: Color}`
  */
 
-export default class Server {
+export default class Server extends EventEmitter {
   private readonly port: number;
 
   private user: User;
 
   private users: string[];
 
+  private server: NetServer;
+
   constructor(port: number) {
+    super();
     this.port = port;
     this.users = allFileNames;
     this.user = new User('');
+    this.server = createServer();
+  }
+
+  public closeServer(): void {
+    this.emit('terminate', 'server terminated');
+    this.server.close();
   }
 
   public runServer(): void {
-    createServer((connection: Socket) => {
+    this.server = createServer((connection: Socket) => {
       console.log('A client has connected');
       connection.on('data', (operationJSON: Buffer) => {
         const operation = JSON.parse(operationJSON.toString());
@@ -104,12 +114,17 @@ export default class Server {
             break;
         }
       });
-
       connection.on('close', () => {
         console.log('Client has disconected');
+        this.emit('close', 'client disconnected');
+      });
+      connection.on('end', () => {
+        console.log('Client has disconected');
+        this.emit('close', 'client disconnected');
       });
     }).listen(this.port, () => {
       console.log(`Server running on port ${this.port}`);
+      this.emit('open', `server open on port ${this.port}`);
     });
   }
 
